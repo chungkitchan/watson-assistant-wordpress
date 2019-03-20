@@ -5,6 +5,7 @@
     "broadcast-channel": "^2.1.9",
     "core-js": "^2.5.3",
     "deepmerge": "^2.2.1",
+    "es6-promise": "^4.2.6",
     "jstz": "^2.0.0",
     "preact": "^8.1.0",
     "preact-compat": "^3.17.0",
@@ -21,12 +22,21 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "dest": "^0.3.1",
+    "gulp": "^4.0.0",
+    "gulp-dest": "^0.2.3",
+    "gulp-util": "^3.0.8",
+    "gulp-zip": "^4.2.0",
+    "moment": "^2.24.0",
     "webpack": "^2.5.1",
     "webpack-dashboard": "^1.1.1"
   },
   "scripts": {
     "watch": "webpack-dashboard -- node ./node_modules/webpack/bin/webpack.js --watch",
-    "build": "node ./node_modules/webpack/bin/webpack.js",
+    "build-webpack": "node ./node_modules/webpack/bin/webpack.js",
+    "docker": "cd ../docker && docker-compose up --force-recreate --build -d",
+    "build": "npm run build-webpack && npm run docker && cd ../js",
+    "dist": "gulp createPluginPackage",
     "prod": "node ./node_modules/webpack/bin/webpack.js -p"
   }
 }

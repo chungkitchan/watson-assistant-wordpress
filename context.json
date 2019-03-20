@@ -1,0 +1,27 @@
+context: {
+    "global": {
+        "system": {
+            "turn_count": 1,
+            "timezone": "Asia/Singapore"
+        }
+    },
+    "skills": {
+        "main skill": {
+            "user_defined": {
+                "userId": "chanck@sg.ibm.com",
+                "private": {
+                    "cred": {
+                        "user": "76e32651-8cb3-45be-bb82-7cacfd789f0e",
+                        "password": "HWpSrZpo7d3utnPdSc9z5P5DM7zXYohJOwrhniiqfXp3faBsz86uq2mNX6ZlPI3L"
+                    }
+                },
+                "clearResult": "\"{\"holdings\":[{\"name\":\"Hong Leong Bank Berhad\",\"quantity\":91,\"symbol\":\"5819.KLA\"},{\"name\":\"United Overseas Bank Limited\",\"quantity\":11,\"symbol\":\"U11.SGP\"},{\"name\":\"Singapore Airlines Limited\",\"quantity\":9,\"symbol\":\"C6L.SGP\"},{\"name\":\"International Business Machines Corporation\",\"quantity\":100,\"symbol\":\"IBM\"}],\"mesg\":\"Your portfolios are 91 shares of Hong Leong Bank Berhad (5819.KLA), 11 shares of United Overseas Bank Limited (U11.SGP), 9 shares of Singapore Airlines Limited (C6L.SGP), 100 shares of International Business Machines Corporation (IBM).\"}",
+                "skip_user_input": true
+            }
+        }
+    }
+} 
+
+context.skills.main_skills.user_defined
+
+context

@@ -37,6 +37,15 @@ class API {
             );
         }
 
+        if ($is_enabled) {
+            register_rest_route('watsonconv/v1', '/feedback',
+                array(
+                    'methods' => 'post',
+                    'callback' => array(__CLASS__, 'route_feedback')
+                )
+            );
+        }
+
         $twilio_config = get_option('watsonconv_twilio');
 
         if (!empty($twilio_config['sid']) && 
@@ -137,6 +146,36 @@ class API {
             # reply with error message to client
             return self::reply_with_text($usage_res['message']);
         }
+    }
+
+    public static function route_feedback(\WP_REST_Request $request) {
+        $body = $request->get_json_params();
+        // debug_to_console($body);
+        $credentials = get_option('watsonconv_credentials');
+        $response = wp_remote_post(
+            $credentials['feedback_url'],
+            array(
+                'timeout' => 20,
+                'headers' => array(
+                    'Authorization' => $credentials['auth_header'],
+                    'Content-Type' => 'application/json'
+                ),
+                'body' => json_encode($body)
+            )
+        );
+        // do_action('watsonconv_message_received', $response);
+        // $response_body = json_decode(wp_remote_retrieve_body($response), true);
+        $response_body = $response['body'];
+        $response_code = wp_remote_retrieve_response_code($response);
+        do_action('logger',$response_body);
+
+        if ($response_code !== 200) {
+            return self::reply_with_response_error($response);
+        } else {
+            // return rest_ensure_response( $response_body );
+            return $response_body;
+            // return  array('status' => $response_body);
+        } 
     }
 
     /**

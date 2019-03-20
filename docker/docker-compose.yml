@@ -20,6 +20,7 @@ services:
      image: wordpress:latest
      volumes:
        - ../watson-conversation:/var/www/html/wp-content/plugins/watsonconversation:ro
+       - ../wp-data-logger:/var/www/html/wp-content/plugins/wp-data-logger:ro
        - ./wp-config.php:/var/www/html/wp-config.php
        - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
      ports:

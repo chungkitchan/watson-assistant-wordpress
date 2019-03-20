@@ -9,6 +9,7 @@ import merge from "deepmerge";
 import MessageGroup from './MessageGroup';
 import InputBox from './InputBox.jsx';
 import CallInterface from './CallInterface.jsx';
+import { node, number, bool } from 'prop-types';
 
 import 'whatwg-fetch';
 
@@ -148,6 +149,54 @@ export default class ChatBox extends Component {
 
     scrollToBottom() {
         jQuery(this.messageList).stop().animate({scrollTop: this.messageList.scrollHeight});
+    }
+    
+    sendFeedback(id,feedbackType,feedbackValue){
+        // console.log("sendFeedback() triggered... feedbackType:",feedbackType,"feedbackValue:",feedbackValue)
+        let feedback = { id: id }
+        feedback[feedbackType]=feedbackValue
+        console.log("sendFeedback(), sending feedback: "+JSON.stringify(feedback)+" to URL: "+watsonconvSettings.feedbackUrl);
+        /**
+        try {
+            var response = await fetch(watsonconvSettings.feedbackUrl, {
+                               headers: {
+                                  'Content-Type': 'application/json',
+                                  'X-WP-Nonce': watsonconvSettings.nonce
+                               },
+                               credentials: 'same-origin',
+                               method: 'POST',
+                               body: JSON.stringify(feedback)
+                            });
+            console.log("In SendFeedback() Response: ",response.json());
+            return (response.json());
+        }   catch(e) {
+            console.log("sendFeedback() catch error:",e);
+        };
+        **/
+        fetch(watsonconvSettings.feedbackUrl, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-WP-Nonce': watsonconvSettings.nonce
+            },
+            credentials: 'same-origin',
+            method: 'POST',
+            body: JSON.stringify(feedback)
+        }).then(response => {
+            // console.log("response: ",response.json())
+            if (!response.ok) {
+                throw Error('Feedback could not be sent.');
+            }
+            return response.json();
+        }).then(data => {
+            console.log("sendFeedback(), data type: %s, data: ", typeof data, data);
+            if (data.indexOf('ok')!=-1) {
+               console.log("sendFeedback(): susccessful");
+               document.getElementById(id).classList.remove('hidden');
+               setInterval(function(){  document.getElementById(id).classList.add('hidden');; }, 5000);
+            }
+        }).catch(error => {
+            console.log(error);
+        });
     }
 
     sendMessage(message, fullBody = false) {
@@ -289,9 +338,11 @@ export default class ChatBox extends Component {
                                 (message, index) =>
                                     <MessageGroup
                                         {...message}
+                                        context={this.state.context}
                                         key={index}
                                         index={index}
                                         showPauses={index >= this.loadedMessages}
+                                        sendFeedback={this.sendFeedback.bind(this)}
                                         sendMessage={this.sendMessage.bind(this)}
                                         scroll={this.scrollToBottom.bind(this)}
                                     />

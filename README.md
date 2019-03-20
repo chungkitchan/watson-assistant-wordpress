@@ -33,6 +33,25 @@ docker-compose up -d
 
 The website can then be accessed at localhost:8000.
 
+## Subsequence Changes
+
+After the first round cloning and changing and testing. The following steps can made subsequence changes to the code and recreate the docker to test:
+1.  Change UI code in js directory as needed
+2.  Rebuild the UI code by running the following in js directory:
+```bash
+npm run build
+```
+3.  Optional install the python library if neccessary in the project root directory:
+```bash
+composer update            # UNIX executable
+```  
+4.  Test in docker by following the following in docker directory:
+```bash
+docker container list
+docker container kill xxxxxxxxxxx  # container id get from above command
+docker-compose up --force-recreate --build -d
+```
+
 ## Releasing Updates
 You must first have a Wordpress.org account with commit access to the plugin's Wordpress [SVN repository](https://developer.wordpress.org/plugins/wordpress-org/how-to-use-subversion/). To release updates to the plugin, you must do the following
 

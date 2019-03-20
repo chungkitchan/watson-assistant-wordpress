@@ -351,6 +351,8 @@ class Setup {
             $settings_page, 'watsonconv_credentials');
         add_settings_field('watsonconv_workspace_url', 'Assistant URL', array(__CLASS__, 'render_url'),
             $settings_page, 'watsonconv_credentials');
+        add_settings_field('watsonconv_feedback_url', 'Feedback URL', array(__CLASS__, 'render_feedback_url'),
+            $settings_page, 'watsonconv_credentials');
         add_settings_field('watsonconv_username', 'Username', array(__CLASS__, 'render_username'),
             $settings_page, 'watsonconv_credentials');
         add_settings_field('watsonconv_password', 'Password', array(__CLASS__, 'render_password'),
@@ -670,13 +672,24 @@ class Setup {
         <?php
     }
 
+    public static function render_feedback_url() {
+        $credentials = get_option('watsonconv_credentials');
+        ?>
+        <input name="watsonconv_credentials[feedback_url]" class="watsonconv_credentials"
+               id="watsonconv_feedback_url" type="text"
+               value="<?php echo empty($credentials['feedback_url']) ? '' : $credentials['feedback_url']; ?>"
+               placeholder='e.g. https://orchestrator_full_host_name/api/feedback'
+               style="max-width: 60em; width: 100%;" />
+        <?php
+    }
+
     public static function render_url() {
         $credentials = get_option('watsonconv_credentials');
         ?>
         <input name="watsonconv_credentials[workspace_url]" class="watsonconv_credentials"
                id="watsonconv_workspace_url" type="text"
                value="<?php echo empty($credentials['workspace_url']) ? '' : $credentials['workspace_url']; ?>"
-               placeholder='e.g. https://gateway.watsonplatform.net/assistant/api/v2/assistants/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/sessions'
+               placeholder='e.g. https://orchestrator_full_host_name/assistant/api/v2/assistants/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/sessions'
                style="max-width: 60em; width: 100%;" />
         <?php
     }

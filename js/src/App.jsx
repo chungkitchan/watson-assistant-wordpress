@@ -9,6 +9,8 @@ import Fab from './Fab.jsx';
 export default class App extends Component {
   constructor(props) {
     super(props);
+    console.log("In App.constructor(), props: "+JSON.stringify(props))
+    console.log("In App.constructor(), watsonconvSettings: "+JSON.stringify(watsonconvSettings))
     if (typeof(sessionStorage) !== 'undefined' && sessionStorage.getItem('watson_bot_window_state')) {
       this.state = JSON.parse(sessionStorage.getItem('watson_bot_window_state'));
     } else {

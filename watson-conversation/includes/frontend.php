@@ -263,6 +263,11 @@ class Frontend {
             $url .= 'index.php';
         }
         $url = add_query_arg( 'rest_route', '/watsonconv/v1/message', $url );
+        $feedbackUrl = trailingslashit( get_home_url( NULL, '', 'rest' ) );
+        if ( 'index.php' !== substr( $feedbackUrl, 9 ) ) {
+            $feedbackUrl .= 'index.php';
+        }
+        $feedbackUrl = add_query_arg( 'rest_route', '/watsonconv/v1/feedback', $feedbackUrl );
 
         return array(
             'delay' => (int) get_option('watsonconv_delay', 0),
@@ -289,6 +294,7 @@ class Frontend {
             'context' => self::get_context_var(),
             'nonce' => wp_create_nonce('wp_rest'),
             'apiUrl' => $url,
+            'feedbackUrl' => $feedbackUrl,
         );
     }
 

@@ -21,6 +21,7 @@ if (typeof localStorage !== 'undefined') {
 }
 
 jQuery(document).ready(function() {
+  console.log("In index().jQuery.ready(), watsonconvSettings: "+JSON.stringify(watsonconvSettings))
   let shortcodeDiv = document.getElementById('watsonconv-inline-box');
   let floatDiv = document.getElementById('watsonconv-floating-box');
   
