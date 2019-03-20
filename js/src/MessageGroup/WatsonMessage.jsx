@@ -200,10 +200,10 @@ export default class WatsonMessage extends Component {
         response.push(
           <div id={`${id}-comment-form`} className={`message feedbackCommentForm hidden watson-font`} >
               <textarea id={`${id}-comment-field`} className="feedback-comment-field" rows="2" placeholder="Enter Your Comment Here..."></textarea>
-              <button class="feedback-button" type="button" onClick={()=> {this.clearCommentForm(`${id}`)}} >
+              <button className="watson-feedback-button" type="button" onClick={()=> {this.clearCommentForm(`${id}`)}} >
                 Cancel
               </button>
-              <button class="feedback-button" type="button" 
+              <button className="watson-feedback-button" type="button" 
                 onClick={() => { this.sendFeedback(`${id}`, "commentForm"); }}>
                 Submit
               </button>
