@@ -523,6 +523,8 @@ class Customize {
             array(__CLASS__, 'render_color'), $settings_page, 'watsonconv_appearance_chatbox');
         add_settings_field('watsonconv_size', $size_title,
             array(__CLASS__, 'render_size'), $settings_page, 'watsonconv_appearance_chatbox');
+        add_settings_field('watsonconv_custom_size', '',
+            array(__CLASS__, 'render_custom_size'), $settings_page, 'watsonconv_appearance_chatbox');
         add_settings_field('watsonconv_chatbox_preview', esc_html__('Preview'),
             array(__CLASS__, 'render_chatbox_preview'), $settings_page, 'watsonconv_appearance_chatbox');
 
@@ -537,7 +539,9 @@ class Customize {
         register_setting(self::SLUG, 'watsonconv_font_size');
         register_setting(self::SLUG, 'watsonconv_font_size_fs');
         register_setting(self::SLUG, 'watsonconv_color', array(__CLASS__,  'validate_color'));
+        do_action( 'logger', "register_setting(watsonconv_size)" );
         register_setting(self::SLUG, 'watsonconv_size');
+        register_setting(self::SLUG, 'watsonconv_custom_size');
 
         register_setting(self::SLUG, 'watsonconv_css_cache');
     }
@@ -862,6 +866,8 @@ class Customize {
     }
 
     public static function render_size() {
+        $custom_size=get_option('watsonconv_custom_size',400);
+        do_action( 'logger', 'custom_size:' . $custom_size );
         Main::render_radio_buttons(
             'watsonconv_size',
             200,
@@ -875,9 +881,21 @@ class Customize {
                 ), array(
                     'label' => esc_html__('Large', self::SLUG),
                     'value' => 240
+                ), array(
+                    'label' => esc_html__('Custom size', self::SLUG),
+                    'value' =>  -1
                 )
             )
         );
+        ?>
+           Custom size
+           <input name="watsonconv_custom_size" id="watsonconv_custom_size"
+           type="number" style="width: 4em"
+           value="<?php echo get_option('watsonconv_custom_size',400) ?>" />
+        <?php
+    }
+
+    public static function render_custom_size() {
     }
 
     public static function render_chatbox_preview() {

@@ -4,6 +4,7 @@ const config = {
   context: __dirname,
   entry: './src/index.js',
   output: {
+    pathinfo: true,
     filename: 'app.js',
     path: __dirname + '/../watson-conversation',
   },

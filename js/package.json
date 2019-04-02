@@ -36,7 +36,7 @@
     "build-webpack": "node ./node_modules/webpack/bin/webpack.js",
     "docker": "cd ../docker && docker-compose up --force-recreate --build -d",
     "build": "npm run build-webpack && npm run docker && cd ../js",
-    "dist": "gulp createPluginPackage",
+    "dist": "npm run build && gulp createPluginPackage",
     "prod": "node ./node_modules/webpack/bin/webpack.js -p"
   }
 }

@@ -150,29 +150,39 @@ export default class ChatBox extends Component {
     scrollToBottom() {
         jQuery(this.messageList).stop().animate({scrollTop: this.messageList.scrollHeight});
     }
-    
-    sendFeedback(id,feedbackType,feedbackValue){
-        // console.log("sendFeedback() triggered... feedbackType:",feedbackType,"feedbackValue:",feedbackValue)
+
+    sendFeedback(id,feedbackType){
+        console.log("sendFeedback() called, feedbackType:",feedbackType);
         let feedback = { id: id }
-        feedback[feedbackType]=feedbackValue
+        if (feedbackType=='comment')  {
+           document.getElementById(id+'-comment-form').classList.remove('hidden');
+           if (this.props.lastID==id)  {
+              this.scrollToBottom();
+           }
+           return;
+        }  else if (feedbackType=='commentForm')  {
+           feedback['comment']=document.getElementById(id+'-comment-field').value; 
+           document.getElementById(id+'-comment-form').classList.add('hidden');
+           document.getElementById(id+'-comment-field').value='';
+           // document.getElementById(id+'-ok').classList.remove('hidden');
+           document.getElementById(id+'-comment').classList.remove('watson-feedback-icon-not-selected');
+           document.getElementById(id+'-comment').classList.add('watson-feedback-icon-selected');
+        }  else if (feedbackType=='ratingThumbsup') {
+           document.getElementById(id+'-thumbsdown').classList.remove('watson-feedback-icon-selected');
+           document.getElementById(id+'-thumbsdown').classList.add('watson-feedback-icon-not-selected');
+           document.getElementById(id+'-thumbsup').classList.remove('watson-feedback-icon-not-selected');
+           document.getElementById(id+'-thumbsup').classList.add('watson-feedback-icon-selected');
+           // document.getElementById(id+'-ok').classList.remove('hidden');
+           feedback['rating']=1;
+        }  else if (feedbackType='ratingThumbsdown')  {
+           document.getElementById(id+'-thumbsup').classList.remove('watson-feedback-icon-selected');
+           document.getElementById(id+'-thumbsup').classList.add('watson-feedback-icon-not-selected');
+           document.getElementById(id+'-thumbsdown').classList.remove('watson-feedback-icon-not-selected');
+           document.getElementById(id+'-thumbsdown').classList.add('watson-feedback-icon-selected');
+           // document.getElementById(id+'-ok').classList.remove('hidden');
+           feedback['rating']=-1;
+        }  
         console.log("sendFeedback(), sending feedback: "+JSON.stringify(feedback)+" to URL: "+watsonconvSettings.feedbackUrl);
-        /**
-        try {
-            var response = await fetch(watsonconvSettings.feedbackUrl, {
-                               headers: {
-                                  'Content-Type': 'application/json',
-                                  'X-WP-Nonce': watsonconvSettings.nonce
-                               },
-                               credentials: 'same-origin',
-                               method: 'POST',
-                               body: JSON.stringify(feedback)
-                            });
-            console.log("In SendFeedback() Response: ",response.json());
-            return (response.json());
-        }   catch(e) {
-            console.log("sendFeedback() catch error:",e);
-        };
-        **/
         fetch(watsonconvSettings.feedbackUrl, {
             headers: {
                 'Content-Type': 'application/json',
@@ -188,16 +198,24 @@ export default class ChatBox extends Component {
             }
             return response.json();
         }).then(data => {
-            console.log("sendFeedback(), data type: %s, data: ", typeof data, data);
+            console.log("sendFeedback(), response: ", data);
+            /**  Only show failure message ****
             if (data.indexOf('ok')!=-1) {
-               console.log("sendFeedback(): susccessful");
-               document.getElementById(id).classList.remove('hidden');
-               setInterval(function(){  document.getElementById(id).classList.add('hidden');; }, 5000);
+               console.log("sendFeedback(): %s susccessful",id);
+               // document.getElementById(id+'-ok').classList.remove('hidden');
+               setInterval(function(){  document.getElementById(id+'-ok').classList.add('hidden');; }, 5000);
+            }  else {
+            ***/
+            if (data.indexOf('ok')==-1) {    // status is not ok => error
+               console.log("sendFeedback(): %s error",id+'-fail');
+               // document.getElementById(id+'-ok').classList.add('hidden');
+               document.getElementById(id+'-fail').classList.remove('hidden');
+               setInterval(function(){  document.getElementById(id+'-fail').classList.add('hidden');; }, 5000);
             }
         }).catch(error => {
             console.log(error);
         });
-    }
+    }    
 
     sendMessage(message, fullBody = false) {
         if (!this.state.convStarted) {
@@ -244,7 +262,7 @@ export default class ChatBox extends Component {
             return response.json();
         }).then(body => {
             let {generic} = body.output;
-
+            console.log("[INFO]: In ChatBox.sendMessage(): response body: ", JSON.stringify(body));
             this.setState({
                 context: body.context,
                 messages: this.state.messages.concat({
@@ -341,6 +359,7 @@ export default class ChatBox extends Component {
                                         context={this.state.context}
                                         key={index}
                                         index={index}
+                                        parent={this}
                                         showPauses={index >= this.loadedMessages}
                                         sendFeedback={this.sendFeedback.bind(this)}
                                         sendMessage={this.sendMessage.bind(this)}

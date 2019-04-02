@@ -62,6 +62,13 @@ You must first have a Wordpress.org account with commit access to the plugin's W
 
 The plugin description, changelog and FAQ can be changed in the [Readme.txt](https://developer.wordpress.org/plugins/wordpress-org/how-your-readme-txt-works/) file stored in the `watson-conversation` directory. All relevant Wordpress.org plugin directory documentation, including the above links, can be found [here](https://developer.wordpress.org/plugins/wordpress-org/).
 
+## Releasing Zip for Updates / Installation
+
+The following steps will generate an Watson Assistant Wordpress plugin that can be unzip to the production Wordpress:  
+1. cd to the "js" director. 
+2. run the following command to build the production app.js & compress the plug in zip format: `npm run dist` . 
+3. The Watson Assistant Wordpress plugin zip file will be in the "dist" directory with the timestamp.
+
 ## Directories
 
 ### docker

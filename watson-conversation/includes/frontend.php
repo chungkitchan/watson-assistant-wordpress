@@ -22,7 +22,8 @@ class Frontend {
         $fab_text_size = get_option('watsonconv_fab_text_size', 15);
         $fab_icon_size = get_option('watsonconv_fab_icon_size', 28);
         $color_rgb = sscanf(get_option('watsonconv_color', '#23282d'), "#%02x%02x%02x");
-        $messages_height = get_option('watsonconv_size', 200);
+        $messages_height = get_option('watsonconv_size', 200)==-1? get_option('watsonconv_custom_size') : get_option('watsonconv_size');
+        do_action( 'logger', "enqueue_styles() called, watsonconv_size: " . $messages_height );
         $position = explode('_', get_option('watsonconv_position', 'bottom_right'));
         
         $is_dark = self::luminance($color_rgb) <= 0.5;
@@ -55,6 +56,13 @@ class Frontend {
                 {
                     background-color: '.$main_color.';
                     color: '.$text_color.';
+                }
+                
+                .watson-feedback-icon-not-selected 
+                {
+                    color: '.$main_color.' ;
+                    opacity: 0.5 ;
+                    text-shadow: -1px 0 '.$text_color.', 0 1px '.$text_color.', 1px 0 '.$text_color.', 0 -1px '.$text_color.';
                 }
 
                 #message-container #messages .watson-message .typing-dot
@@ -142,11 +150,11 @@ class Frontend {
                         max-width: 100%;
                     }
 
-                    #watson-box .watson-font
+                    #watson-box .watson-font, .watson-feedback-icon
                     {
                         font-size: '.$font_size_fs.'pt;
                     }
-                
+                    
                     #watson-float
                     {
                         top: 0;
@@ -267,8 +275,12 @@ class Frontend {
         if ( 'index.php' !== substr( $feedbackUrl, 9 ) ) {
             $feedbackUrl .= 'index.php';
         }
-        $feedbackUrl = add_query_arg( 'rest_route', '/watsonconv/v1/feedback', $feedbackUrl );
-
+        $credentials = get_option('watsonconv_credentials');
+        if ($credentials['feedback_url'] && strlen($credentials['feedback_url'])>0 ) {
+           $feedbackUrl = add_query_arg( 'rest_route', '/watsonconv/v1/feedback', $feedbackUrl );
+        }  else {
+           $feedbackUrl = '';
+        }  
         return array(
             'delay' => (int) get_option('watsonconv_delay', 0),
             'minimized' => get_option('watsonconv_minimized', 'no'),

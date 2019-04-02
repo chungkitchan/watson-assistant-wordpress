@@ -76,6 +76,7 @@ jQuery(document).ready(function($) {
 
   $('#watsonconv_enabled')
     .on('change', function() {
+      console.log('#watsonconv_enabled.onChange..')
       if (this.checked) {
         $('input.watsonconv_credentials').prop('disabled', false);
       } else {
@@ -89,7 +90,8 @@ jQuery(document).ready(function($) {
   // Button "Copy X messages to clipboard"
   var copyLogsButton = document.getElementById("watsonconv_copy_log_messages");
   // Function to copy log messages after click
-  copyLogsButton.onclick = function() {
+  // copyLogsButton.onclick = function() {
+  $('#copyLogsButton').on('click',function() {
     // Block with all the messages
     var logContainer = document.getElementById("watsonconv_log_container");
     // Variable to store result text
@@ -150,7 +152,8 @@ jQuery(document).ready(function($) {
 
     // Notifying user about copying
     alert("Log copied to clipboard");
-  }
+  // }
+  });
 
   // ---- Voice Calling Section ----
 
@@ -400,8 +403,7 @@ jQuery(document).ready(function($) {
 
   $('#watsonconv_font_size')
     .on('change', function() {
-      var size = $('input[name="watsonconv_size"]:checked').val();
-
+      var size = $('input[name="watsonconv_size"]:checked').val()==-1 ? $('#watsonv_custom_size').val() : $('input[name="watsonconv_size"]:checked').val();
       $('#watson-box .watson-font').css('font-size', this.value + 'pt');
       $('#watson-box').css('width', (0.825 * size + 4.2 * this.value) + 'pt');
     });
@@ -409,9 +411,9 @@ jQuery(document).ready(function($) {
   $('input[name="watsonconv_size"]')
     .on('change', function() {
       var fontSize = $('#watsonconv_font_size').val();
-
-      $('#watson-box').css('width', (0.825 * this.value + 4.2 * fontSize) + 'pt');
-      $('#message-container').css('height', this.value + 'pt');
+      var size = this.value ==-1 ? $('#watsonconv_custom_size').val() : this.value;
+      $('#watson-box').css('width', (0.825 * size + 4.2 * fontSize) + 'pt');
+      $('#message-container').css('height', size + 'pt');
     });
 
   $('input[name="watsonconv_send_btn"]')
@@ -428,6 +430,16 @@ jQuery(document).ready(function($) {
   $('#watsonconv_title')
     .on('input', function() {
       $('#watson-title').text(this.value)
+    });
+  
+  $('#watsonconv_custom_size')
+    .on('change', function() {
+      if ($('input[name="watsonconv_size"]:checked').val()==-1) {
+         var fontSize = $('#watsonconv_font_size').val();
+         var size = $('#watsonconv_custom_size').val() ;
+         $('#watson-box').css('width', (0.825 * size + 4.2 * fontSize) + 'pt');
+         $('#message-container').css('height', size + 'pt');
+      }
     });
 
   $('#watsonconv_clear_text')

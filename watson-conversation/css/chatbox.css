@@ -29,6 +29,44 @@
   white-space: nowrap;
 }
 
+.watson-feedback-button
+{
+   padding: 10px 24px;
+}
+
+.dashicons.dashicons-thumbs-down.watson-feedback-icon {
+  border-right: 2px solid grey;
+  border-left: 2px solid grey;
+  width: 50px;
+}
+
+.watson-feedback-icon
+{
+   cursor: pointer;
+   margin: 0px 8px 0px 8px;
+}
+
+.watson-feedback-icon:hover
+{
+  opacity: 1;
+}
+
+.watson-feedback-icon-selected
+{
+  color: white;
+}
+/*
+.watson-feedback-icon-not-selected
+{
+   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black ; 
+}
+*/
+
+.feedback-comment-field{
+   padding: 10px 24px;
+   margin: 1px 0px 2px;
+}
+
 #watson-fab-float
 {
   position: fixed;
@@ -511,10 +549,10 @@
 }
 
 .watson-feedback-button {
-  font-size: 70%;
+  /* font-size: 70%; */
   margin-top: 0.15em;
   margin-right: 0.5em;
   margin-left: 0.3em;
-  opacity: 0.7;
+  /* opacity: 0.8; */
   cursor: pointer; 
 }
