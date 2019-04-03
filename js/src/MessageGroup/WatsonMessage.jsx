@@ -177,7 +177,7 @@ export default class WatsonMessage extends Component {
 
       }
     }
-    console.log("In WatsonMessage.render(), _id: "+this.props.context._id)
+    console.log("In WatsonMessage.render(), _id: "+(this.props.context?this.props.context._id:'null'));
 
     if ((showFeedback && watsonconvSettings.feedbackUrl && watsonconvSettings.feedbackUrl.length> 0) &&
         ((this.props.context && this.props.context.skills && this.props.context.skills['main skill'] && 
