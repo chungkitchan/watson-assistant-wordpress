@@ -182,7 +182,7 @@ export default class WatsonMessage extends Component {
     if ((showFeedback && watsonconvSettings.feedbackUrl && watsonconvSettings.feedbackUrl.length> 0) &&
         ((this.props.context && this.props.context.skills && this.props.context.skills['main skill'] && 
         this.props.context.skills['main skill'].user_defined && this.props.context.skills['main skill'].user_defined._id ) || 
-        (this.props.context._id))) {
+        (this.props.context && this.props.context._id))) {
          
         let id = ( this.props.context._id ?this.props.context._id: this.props.context.skills['main skill'].user_defined._id ) 
         parent.props.lastID = id;         
