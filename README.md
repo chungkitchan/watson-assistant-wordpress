@@ -31,7 +31,7 @@ Simply run the following in your shell from the `docker` directory:
 docker-compose up -d
 ```
 
-The website can then be accessed at localhost:8000.
+The website can then be accessed at http://localhost:8000.
 
 ## Subsequence Changes
 

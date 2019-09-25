@@ -6,6 +6,8 @@
     "core-js": "^2.5.3",
     "deepmerge": "^2.2.1",
     "es6-promise": "^4.2.6",
+    "gulp-gzip": "^1.4.2",
+    "gulp-tar": "^2.1.0",
     "jstz": "^2.0.0",
     "preact": "^8.1.0",
     "preact-compat": "^3.17.0",

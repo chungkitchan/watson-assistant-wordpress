@@ -539,7 +539,7 @@ class Customize {
         register_setting(self::SLUG, 'watsonconv_font_size');
         register_setting(self::SLUG, 'watsonconv_font_size_fs');
         register_setting(self::SLUG, 'watsonconv_color', array(__CLASS__,  'validate_color'));
-        do_action( 'logger', "register_setting(watsonconv_size)" );
+        // do_action( 'logger', "register_setting(watsonconv_size)" );
         register_setting(self::SLUG, 'watsonconv_size');
         register_setting(self::SLUG, 'watsonconv_custom_size');
 
@@ -867,7 +867,7 @@ class Customize {
 
     public static function render_size() {
         $custom_size=get_option('watsonconv_custom_size',400);
-        do_action( 'logger', 'custom_size:' . $custom_size );
+        // do_action( 'logger', 'custom_size:' . $custom_size );
         Main::render_radio_buttons(
             'watsonconv_size',
             200,

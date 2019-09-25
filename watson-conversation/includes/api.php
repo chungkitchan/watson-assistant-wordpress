@@ -271,6 +271,15 @@ class API {
      */
     private static function route_request_v1(\WP_REST_Request $request) {
         $body = $request->get_json_params();
+        /* ADDED BY CCEIBM. $logged_in to check if user is logged in to Wordpress */
+        $logged_in = is_user_logged_in() ? 'true' : 'false';
+        $user_id = '';
+        $user_email = '';
+        if ( is_user_logged_in() ) { 
+           $current_user = wp_get_current_user();
+           $user_id = $current_user->ID;
+           $user_email = $current_user->email;
+        } 
         $credentials = get_option('watsonconv_credentials');
 
         $send_body = apply_filters(
@@ -284,7 +293,9 @@ class API {
         do_action('watsonconv_message_pre_send', $send_body);
 
         $response = wp_remote_post(
-            $credentials['workspace_url'].'?version='.self::API_VERSION,
+            /* MODIFIED BY CCEIBM. Added $logged_in value via URL param 'logged_in' */
+            /* MODIFIED BY CCK if logged_in send user_email or user_id to WA as well */
+            $credentials['workspace_url'].'?logged_in='.$logged_in.'&user='.$user_email.'&version='.self::API_VERSION,
             array(
                 'timeout' => 20,
                 'headers' => array(
@@ -296,8 +307,9 @@ class API {
         );
 
         do_action('watsonconv_message_received', $response);
-
+        // do_action( 'logger', 'route_request_v1() $response: ' . json_encode($response));
         $response_body = json_decode(wp_remote_retrieve_body($response), true);
+        do_action( 'logger', 'route_request_v1() $response_body: ' . json_encode($response_body));
         $response_code = wp_remote_retrieve_response_code($response);
 
         $response_body = apply_filters('watsonconv_bot_message', $response_body);
@@ -317,6 +329,7 @@ class API {
      * @return mixed|\WP_Error -- reply
      */
     private static function route_request_v2(\WP_REST_Request $request) {
+    // private static function route_request_v2(\WP_REST_Request $request) {
         $body = $request->get_json_params();
         $session_id = array_key_exists('session_id', $body) ? $body['session_id'] : null;
 
@@ -341,6 +354,15 @@ class API {
 
         $credentials = get_option('watsonconv_credentials');
         $endpoint_url = $credentials['workspace_url'];
+        /* ADDED BY CCEIBM. $logged_in to check if user is logged in to Wordpress */
+        $logged_in = is_user_logged_in() ? 'true' : 'false';
+        $user_id = '';
+        $user_email = '';
+        if ( is_user_logged_in() ) { 
+           $current_user = wp_get_current_user();
+           $user_id = $current_user->ID;
+           $user_email = $current_user->email;
+        } 
         $send_body = apply_filters(
             'watsonconv_user_message',
             array(
@@ -359,7 +381,8 @@ class API {
 
         do_action('watsonconv_message_pre_send', $send_body);
 
-        $url_tpl = $endpoint_url.'/%s/message?version='.self::API_VERSION_2;
+        /* MODIFIED BY CCEIBM. Added $logged_in value via URL param 'logged_in' */
+        $url_tpl = $endpoint_url.'/%s/message?logged_in='.$logged_in.'&user='.$user_email.'&version='.self::API_VERSION_2;
         $post_args = array(
             'timeout' => 20,
             'headers' => array(
@@ -380,12 +403,11 @@ class API {
         }
 
         $response_body = json_decode(wp_remote_retrieve_body($response), true);
+        // do_action( 'logger', 'route_request_v2(): ' . json_encode($response_body)); 
         $watson_request_array['watson_response'] = $response_body;
         $watson_request_array['session_id'] = $session_id;
         do_action('watsonconv_message_received', $response);
         $response_body = apply_filters('watsonconv_bot_message', $response_body);
-
-        
 
         if(isset($response_body['output']["actions"])
             && !empty($response_body['output']["actions"])

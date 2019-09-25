@@ -389,8 +389,10 @@ class Frontend {
     }
 
     public static function register_scripts() {
-        wp_register_script('watsonconv-chat-app', WATSON_CONV_URL.'app.js', array('jquery'), self::get_version(), true);
-        wp_register_style('watsonconv-chatbox', WATSON_CONV_URL.'css/chatbox.css', array('dashicons'), self::get_version());
+        //wp_register_script('watsonconv-chat-app', WATSON_CONV_URL.'app.js', array('jquery'), self::get_version(), true);
+        wp_register_script('watsonconv-chat-app', WATSON_CONV_URL.'app.js', array('jquery'), '1.21', true);
+        //wp_register_style('watsonconv-chatbox', WATSON_CONV_URL.'css/chatbox.css', array('dashicons'), self::get_version());
+        wp_register_style('watsonconv-chatbox', WATSON_CONV_URL.'css/chatbox.css', array('dashicons'), '1.21');
         wp_enqueue_script('wp-api');
         wp_localize_script( 'wp-api', 'wpApiSettings', array( 'root' => esc_url_raw( rest_url() ), 'nonce' => wp_create_nonce( 'wp_rest' ) ) );
     }

@@ -81,7 +81,7 @@ export default class ChatBox extends Component {
             this.messageList.scrollTop = this.messageList.scrollHeight;
         }
 
-        if (!this.state.convStarted && !this.props.isMinimized) {
+        if (!this.state.convStarted /** && !this.props.isMinimized **/) {
             new Promise(
                 (resolve, reject) => {
                     this.bc.onmessage = function (state) {
@@ -218,6 +218,7 @@ export default class ChatBox extends Component {
     }    
 
     sendMessage(message, fullBody = false) {
+        console.log("In ChatBox.jsx, sendMessage was called: ",JSON.stringify(message));
         if (!this.state.convStarted) {
             this.setState({convStarted: true});
         }
